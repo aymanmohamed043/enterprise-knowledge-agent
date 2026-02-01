@@ -1,0 +1,1 @@
+- Agents reason over structured, trusted, permissioned data.
