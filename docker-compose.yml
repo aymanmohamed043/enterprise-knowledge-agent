@@ -13,8 +13,18 @@ services:
         volumes: 
             - postgres_data:/var/lib/postgresql/data
 
+    # Vector DB Service (Chroma)
+    chroma:
+        image: chromadb/chroma:latest
+        container_name: enterprise_chroma
+        ports:
+            - "8001:8000"
+        volumes:
+            - chroma_data:/chroma/chroma
 volumes:
     postgres_data:
+    chroma_data:
+    
 
 
 
