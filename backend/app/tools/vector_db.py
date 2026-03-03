@@ -43,7 +43,6 @@ def search_documents(query: str):
     return "\n\n".join([doc.page_content for doc in results])
 
 
-
 if __name__ == "__main__":
     # test search_documents
     print(search_documents("What is the skills ayman has?"))

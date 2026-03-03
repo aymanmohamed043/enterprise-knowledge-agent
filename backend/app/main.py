@@ -9,6 +9,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from backend.app.core.logging_config import configure_logging
 from backend.app.routers import ingest, chat
+from backend.app.routers import rag_endpoint
 
 configure_logging(level=os.getenv("LOG_LEVEL", "INFO"))
 app = FastAPI(title="Enterprise Knowledge Agent")
@@ -16,6 +17,7 @@ app = FastAPI(title="Enterprise Knowledge Agent")
 # Register the new ingestion router
 app.include_router(ingest.router, prefix="/api/v1")
 app.include_router(chat.router, prefix="/api/v1")
+app.include_router(rag_endpoint.router, prefix="/api/v1")
 
 class HealthCheck(BaseModel):
     status: str = "OK"

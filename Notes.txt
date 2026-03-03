@@ -98,3 +98,7 @@ To make this even more "BOOM," consider adding these two "Pro" features before y
 
 Comparison Analytics: The ability for the agent to say: "According to the SQL data, revenue is up 10%, but according to the HR Handbook, we should be reinvesting that into the Employee Wellness program." (This shows True Cross-Domain Intelligence).
 
+------------------------------
+
+- summarizer: Mistral Small handles up to 32k tokens, which is plenty for most documents (roughly 40-50 pages of text).
+

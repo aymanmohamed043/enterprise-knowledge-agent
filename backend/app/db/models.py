@@ -118,3 +118,12 @@ class ChatHistory(Base):
     content = Column(Text) # The message text
     sender = Column(String) # "user" or "ai"
     timestamp = Column(DateTime, default=datetime.utcnow)
+
+class DocumentMetadata(Base):
+    __tablename__ = "document_metadata"
+
+    id = Column(Integer, primary_key=True, index=True)
+    filename = Column(String, unique=True)
+    summary = Column(Text)
+    keywords = Column(Text) # Comma-separated list
+    created_at = Column(DateTime, default=datetime.utcnow)

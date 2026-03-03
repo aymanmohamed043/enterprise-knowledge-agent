@@ -63,11 +63,11 @@ async def chat_with_agent(user_id: int, message: str, db: Session = Depends(get_
     # 4. Add the NEW message to the list
     formatted_history.append(HumanMessage(content=message))
 
-    # 5. Invoke the Brain
-    # The Graph now sees the OLD messages + the NEW message.
+    # 5. Invoke the Brain (pass db so orchestrator can call get_knowledge_catalog(db))
     initial_state = {
         "messages": formatted_history,
-        "user_role": role_name
+        "user_role": role_name,
+        "db": db,
     }
 
     result = app_graph.invoke(initial_state)
