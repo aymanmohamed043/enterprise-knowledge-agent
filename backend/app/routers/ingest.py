@@ -57,7 +57,6 @@ async def ingest_document(user_id: int, file: UploadFile = File(...), db: Sessio
         db_doc = DocumentMetadata(
             filename=file.filename,
             summary=ai_insights["summary"],
-            topics=ai_insights["topics"],
             keywords=ai_insights["keywords"]
         )
         db.add(db_doc)
@@ -70,8 +69,6 @@ async def ingest_document(user_id: int, file: UploadFile = File(...), db: Sessio
         # 3. Add Metadata (Crucial for filtering later!)
         for split in splits:
             split.metadata["source"] = file.filename
-            split.metadata["topics"] = ai_insights["topics"]
-            split.metadata["keywords"] = ai_insights["keywords"]
             split.metadata["uploaded_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
 
         # 4. Push to ChromaDB

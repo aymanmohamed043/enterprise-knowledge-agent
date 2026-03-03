@@ -8,21 +8,31 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from langchain_core.messages import SystemMessage, HumanMessage
+from sqlalchemy.orm import Session
 from backend.app.agents.tool_node import get_tools_for_role
 from backend.app.agents.state import AgentState
 from backend.app.core.llm import llm
 from backend.app.agents.prompts import ADMIN_PROMPT, ANALYST_PROMPT, HR_PROMPT
 from backend.app.tools.schema_helper import get_database_schema
 from backend.app.tools.vector_db import get_vector_store
+from backend.app.db.database import SessionLocal
+
 from backend.app.tools.vector_db_helper import get_knowledge_catalog
 logger = logging.getLogger(__name__)
 
 
 def orchestrator_node(state: AgentState):
     role = state.get("user_role", "viewer")
-    # 1. Get the Schema (So the Analyst/Admin knows the table names!)
-    schema_info = get_database_schema()
-    vector_db_metadata = get_knowledge_catalog()
+
+    # Create a temporary session to fetch metadata
+    db = SessionLocal() 
+    try:
+        # 1. Get the Schema (So the Analyst/Admin knows the table names!)
+        schema_info = get_database_schema()
+        # 2. Get the Vector Database Metadata (using the temporary session)
+        vector_db_metadata = get_knowledge_catalog(db) 
+    finally:
+        db.close() # Close the session after use
 
     allowed_tools = get_tools_for_role(role)
     # print(f"allowed_tools: {allowed_tools}")
