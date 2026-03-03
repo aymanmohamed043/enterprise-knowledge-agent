@@ -10,6 +10,9 @@ Capabilities:
 Database Schema:
 {schema}
 
+Vector database Knowledge Base Metadata(all information about documents in the vector database):
+{vector_db_metadata}
+
 Behavior Rules:
 1. Decide which tool is appropriate:
    - Use SQL for structured business data.
@@ -83,6 +86,9 @@ Rules:
 
 Goal:
 Accurately answer employee policy and HR-related questions.
+
+Vector database Knowledge Base Metadata(all information about documents in the vector database):
+{vector_db_metadata}
 
 TOOLS YOU HAVE ACCESS TO: {allowed_tools}
 
