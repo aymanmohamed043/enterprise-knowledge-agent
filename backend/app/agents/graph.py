@@ -13,6 +13,7 @@ from langgraph.prebuilt import ToolNode, tools_condition
 from backend.app.agents.state import AgentState
 from backend.app.agents.orchestrator import orchestrator_node
 from backend.app.agents.tool_node import query_db, search_docs
+from backend.app.agents.formatter import formatter_node
 
 logger = logging.getLogger(__name__)
 
@@ -42,6 +43,7 @@ workflow = StateGraph(AgentState)
 
 # 2. Add the "Brain" (The Orchestrator)
 workflow.add_node("orchestrator", orchestrator_node)
+workflow.add_node("formatter", formatter_node)
 
 # 3. Add the "Hands" (The Action Layer) with logging
 workflow.add_node("action_layer", _action_layer_node)
@@ -55,13 +57,13 @@ workflow.add_conditional_edges(
     tools_condition,
     {
         "tools": "action_layer", # Map the 'tools' signal to our node name
-        "__end__": END           # Map the 'finish' signal to the end of the graph
+        "__end__": "formatter"           # Map the 'finish' signal to the end of the graph
     }
 )
 
 # 6. The Feedback Loop
-workflow.add_edge("action_layer", "orchestrator")
-
+workflow.add_edge("action_layer", "formatter")
+workflow.add_edge("formatter", END)
 # 7. Final Compilation
 # This creates the 'app_graph' object that we will import into FastAPI.
 app_graph = workflow.compile()
