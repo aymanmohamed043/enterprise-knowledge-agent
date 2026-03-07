@@ -1,5 +1,4 @@
 import sys
-import os
 from pathlib import Path
 _REPO_ROOT = Path(__file__).resolve().parents[2]
 if str(_REPO_ROOT) not in sys.path:
@@ -11,7 +10,7 @@ from backend.app.core.logging_config import configure_logging
 from backend.app.routers import ingest, chat
 from backend.app.routers import rag_endpoint
 
-configure_logging(level=os.getenv("LOG_LEVEL", "INFO"))
+configure_logging()
 app = FastAPI(title="Enterprise Knowledge Agent")
 
 # Register the new ingestion router

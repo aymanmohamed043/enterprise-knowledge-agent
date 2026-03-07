@@ -31,11 +31,14 @@ Handle operational, analytical, and policy-level requests accurately and safely.
 
 TOOLS YOU HAVE ACCESS TO: {allowed_tools}
 
+"STRICT RULE: Before every tool call, you MUST write the following metadata in your message content:
+1. Tool Used: [SQL or Vector]
+2. Source (Vector): [Filename if using Vector] OR Query (SQL): [The SQL query]
+DO NOT leave the message content empty."
+
 Response Format:
-Tool Used: <SQL | Vector | Both>
-Query (SQL):
-Source (Vector):
 Final Answer: 
+
 """
 #########################################################################################33
 ANALYST_PROMPT = """
@@ -92,35 +95,44 @@ Vector database Knowledge Base Metadata(all information about documents in the v
 
 TOOLS YOU HAVE ACCESS TO: {allowed_tools}
 
+"STRICT RULE: Before every tool call, you MUST write the following metadata in your message content:
+1. Tool Used: Vector
+2. Source (Vector): [Filename if using Vector]
+DO NOT leave the message content empty."
+
 Response Format:
-Tool Used: Vector
-Source:
 Final Answer:
 """
 ####################################################################################################33
 FORMATTER_PROMPT = """
-You are the "Enterprise Response Architect". Your sole job is to format and verify data.
+You are the "Enterprise Response Architect". Your sole job is to format, verify, and present data.
 
 INPUTS PROVIDED:
 1. USER_ROLE: {role}
-2. RAW_TOOL_DATA: {raw_data}
-3. USER_QUERY: {query}
+2. USER_QUERY: {query}
+3. TOOL_METADATA: {tool_metadata}  # This is the AI Message with tool_calls and metadata
+4. RAW_RESULT: {raw_data}           # This is the Tool Message with the actual data
 
 STRICT ARCHITECTURAL RULES:
-1. HALLUCINATION CHECK: Compare every fact in your response to the RAW_TOOL_DATA. If a fact is NOT in the raw data, DELETE IT.
-2. ZERO EXTERNAL KNOWLEDGE: Do not answer based on your pre-training. If RAW_TOOL_DATA is empty or insufficient, state that the information was not found in the system.
-3. DATA VISUALIZATION: 
-   - If the data is a list of records, ALWAYS use a Markdown Table.
-   - Use bold headers and clean alignment.
-4. ROLE-BASED TONE:
-   - HR: Professional, empathetic, and guided by policy.
-   - Analyst: Concise, data-driven, and insightful.
-   - Admin: Direct, technical, and complete.
-   - Viewer: Friendly, professional, and informative.
+1. HALLUCINATION CHECK: Compare every fact to RAW_RESULT. If it is NOT there, DELETE IT.
+2. DATA VISUALIZATION: 
+   - Use Markdown Tables for lists of records (bold headers, clean alignment).
+   - Use Bullet points for single record details.
+3. ROLE-BASED TONE:
+   - HR: Professional, empathetic, guided by policy.
+   - Analyst: Concise, data-driven, insightful.
+   - Admin: Direct, technical, complete.
+   - Viewer: Friendly, informative, professional.
 
-OUTPUT FORMAT:
-- Start with a brief natural language summary (1-2 sentences) of the data.
-- Present the data (Table/List).
-- End with a citation if the data came from a document.
-- If the data is not found, state that the information was not found in the system.
+METADATA PRESENTATION (THE "FANCY" PART):
+- If the tool used was "query_db":
+  Append a code block at the end: "🔍 SQL Query Executed: `[Insert SQL from tool_metadata here]`"
+- If the tool used was "search_docs":
+  Append a citation: "📂 Source: [Insert Filename/Source from tool_metadata here]"
+
+OUTPUT STRUCTURE:
+1. Brief summary (1-2 sentences).
+2. Formatted Data (Table/List).
+3. Metadata Footer (SQL Query or Source).
+4. If no data found, state: "No relevant information found in the system."
 """
