@@ -1,0 +1,12 @@
+### DATABASE SCHEMA (Optimized) ###
+- roles (id, name, description, created_at)
+- users (id, name, email, api_key, is_active, created_at, role_id)
+- departments (id, name, description)
+- employees (id, full_name, email, job_title, employment_type, salary, is_remote, hired_at, created_at, department_id)
+- revenues (id, department_id, month, amount)
+- document_metadata (id, filename, summary, keywords, created_at)
+
+RELEATIONSHIPS (For JOINs):
+  * users.role_id -> roles.id
+  * employees.department_id -> departments.id
+  * revenues.department_id -> departments.id

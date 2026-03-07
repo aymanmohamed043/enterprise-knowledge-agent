@@ -22,6 +22,6 @@ def get_knowledge_catalog(db: Session):
     
     catalog = "AVAILABLE KNOWLEDGE DOCUMENTS:\n"
     for doc in docs:
-        catalog += f"- File: {doc.filename}\n Summary: {doc.summary}\n  Keywords: {doc.keywords}\n\n"
+        catalog += f"- File Name: {doc.filename}\n Summary: {doc.summary}\n  Keywords: {doc.keywords}\n\n"
         
     return catalog
