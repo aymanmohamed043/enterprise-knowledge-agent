@@ -11,37 +11,48 @@ from backend.app.db.database import engine
 
 def get_database_schema():
     """
-    Scans the PostgreSQL database and returns a string 
-    describing all tables and columns.
+    نسخة محسنة تعطي الـ LLM فقط ما يحتاجه: الأسماء والعلاقات.
     """
-    # 1. Initialize the Inspector
-    # This is a SQLAlchemy tool that "looks inside"  DB.
     inspector = inspect(engine)
-    
-    # 2. Get all table names
     table_names = inspector.get_table_names()
     
-    schema_description = "### DATABASE SCHEMA ###\n\n"
+    # جداول يجب تجاهلها تماماً لتوفير التوكنز ومنع التشتت
+    blacklisted_tables = ["access_logs", "alembic_version", "chat_history"]
     
+    schema_description = "### DATABASE SCHEMA (Optimized) ###\n"
+    relationships = []
+
     for table_name in table_names:
-        # Security Note: We skip 'access_logs' so the AI doesn't 
-        # get distracted by internal audit tables.
-        if table_name == "access_logs":
+        if table_name in blacklisted_tables:
             continue
             
-        schema_description += f"Table: {table_name}\n"
+        # إضافة اسم الجدول فقط
+        schema_description += f"- {table_name} ("
         
-        # 3. Get columns for this table
+        # جلب الأعمدة (الأسماء فقط بدون الأنواع)
         columns = inspector.get_columns(table_name)
-        for column in columns:
-            col_name = column['name']
-            col_type = str(column['type'])
-            schema_description += f" - {col_name} ({col_type})\n"
+        col_names = [col['name'] for col in columns]
+        schema_description += ", ".join(col_names) + ")\n"
         
-        schema_description += "\n"
+        # جلب المفاتيح الخارجية (Foreign Keys) لفهم الـ JOIN
+        fks = inspector.get_foreign_keys(table_name)
+        for fk in fks:
+            target_table = fk['referred_table']
+            target_col = fk['referred_columns'][0]
+            source_col = fk['constrained_columns'][0]
+            relationships.append(f"  * {table_name}.{source_col} -> {target_table}.{target_col}")
+
+    # إضافة قسم العلاقات في النهاية
+    if relationships:
+        schema_description += "\nRELEATIONSHIPS (For JOINs):\n"
+        schema_description += "\n".join(relationships)
     
     return schema_description
 
 # Simple test to see what the AI will see
 if __name__ == "__main__":
-    print(get_database_schema())
+    # print schema in text file in same dir
+    with open("schema.txt", "w") as f:
+        f.write(get_database_schema())
+    
+    print("done")

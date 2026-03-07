@@ -18,25 +18,21 @@ async def generate_document_metadata(context_text: str):
     """
     Uses Mistral to analyze document text and extract metadata.
     """
-    if len(context_text) > 10000:
-        context_text = context_text[:10000]
-    else:
-        context_text = context_text
-
-    prompt = fprompt = f"""
+    context_text = context_text[:10000] if len(context_text) > 10000 else context_text # limit the context text to 10000 tokens 
+    prompt = f"""
         Analyze the provided document text and generate a structured JSON extraction.
 
         CONSTRAINTS:
-        1. SUMMARY: Exactly 10 sentences. The VERY FIRST sentence must clearly state the document's type and its primary purpose (e.g., "This document is a technical manual for..." or "This file is a legal contract regarding...").
-        2. KEYWORDS: Provide meaningful, multi-word phrases or specific terms (max 15). If the text does not support 15 high-quality keywords, provide fewer. Do NOT include generic or isolated "filler" words.
+        1. SUMMARY: One powerful sentence starting with the document type and its exact purpose (e.g., "Technical Manual for X...").
+        2. KEYWORDS: Extract 3 bullet points summarizing the most critical info for a decision-maker.
 
         TEXT:
         {context_text}
 
         RETURN ONLY VALID JSON:
         {{
-        "summary": "The 10-sentence overview starting with the file identification...",
-        "keywords": ["meaningful phrase 1", "specific term 2", "..."]
+            "summary": "The single identifying sentence...",
+            "keywords": "point 1, point 2, point 3" 
         }}
     """
     # prompt is already filled via f-string above; do not call .format() or braces like {"summary"} become placeholders and cause KeyError
