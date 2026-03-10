@@ -18,11 +18,12 @@ embeddings_model = SentenceTransformerEmbeddings()
 # For simplicity in dev, let's use the Docker HTTP Client.
 
 import chromadb
-from chromadb.config import Settings
+
+CHROMA_HOST = os.getenv("CHROMA_HOST", "localhost")
+CHROMA_PORT = int(os.getenv("CHROMA_PORT", "8001"))
 
 def get_vector_store():
-    # Connect to the Chroma Container running on port 8001
-    client = chromadb.HttpClient(host='localhost', port=8001)
+    client = chromadb.HttpClient(host=CHROMA_HOST, port=CHROMA_PORT)
     
     vector_store = Chroma(
         client=client,

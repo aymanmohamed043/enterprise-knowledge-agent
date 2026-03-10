@@ -100,5 +100,16 @@ Comparison Analytics: The ability for the agent to say: "According to the SQL da
 
 ------------------------------
 
-- summarizer: Mistral Small handles up to 32k tokens, which is plenty for most documents (roughly 40-50 pages of text).
+Metric,Original Setup,New Setup,Improvement
+Total Latency,10.83s,~5.4s,~50% Faster
+Formatter Time,7.36s,~1.9s,~74% Faster
+Total Cost,$0.0048,$0.0008,83% Cheaper
+Total Tokens,3.7K,~1.7K,~54% Reduction
 
+2. The Cost Efficiency
+A cost of $0.0008 per query is excellent.
+
+Old Cost: $4.80 per 1,000 queries.
+
+New Cost: $0.80 per 1,000 queries.
+You are now running at roughly 1/6th of your previous price, which significantly extends your quota.
