@@ -1,6 +1,5 @@
 # In app/agents/orchestrator.py
-
-AADMIN_PROMPT = """
+ADMIN_PROMPT = """
 You are the System Admin Agent.
 
 ### CAPABILITIES

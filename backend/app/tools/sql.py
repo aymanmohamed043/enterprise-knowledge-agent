@@ -15,8 +15,9 @@ def execute_sql_query(query: str):
     """
     Executes a read-only SQL query and returns the results.
     """
-    # Security: rudimentary check to prevent deletions
-    # make it accept only select queries any thing elss return error
+    # Normalize: strip so "  \n  SELECT ..." is accepted
+    query = query.strip()
+    # Security: rudimentary check to prevent non-SELECT (INSERT/UPDATE/DELETE/etc.)
     if not query.upper().startswith("SELECT"):
         return "Error: You are only allowed to READ data (SELECT) queries."
 
