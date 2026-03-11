@@ -1,0 +1,252 @@
+.wrapper {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: clamp(1rem, 2.5vw, 2rem) clamp(1.5rem, 4vw, 4rem) clamp(1.5rem, 3vw, 4rem);
+  position: relative;
+  overflow: hidden;
+  background: #0a0e1a;
+  box-sizing: border-box;
+}
+
+/* Background: your KnowledgeVolt architecture image (place login-bg.png in frontend/public/) */
+.bgImage {
+  position: absolute;
+  inset: 0;
+  background: url("/login-bg.png") center center / cover no-repeat;
+  pointer-events: none;
+}
+
+/* Very light overlay: keeps background colors visible everywhere; only a slight tint on the right */
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent 0%, transparent 50%, rgba(15, 23, 42, 0.2) 85%, rgba(15, 23, 42, 0.35) 100%);
+  pointer-events: none;
+}
+
+/* Frosted glass panel: scales with viewport so it fits any laptop size */
+.card {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: min(360px, 28vw);
+  min-width: min(280px, 85vw);
+  padding: clamp(1.25rem, 2.5vw, 1.75rem) clamp(1.25rem, 3vw, 2rem);
+  background: rgba(30, 41, 59, 0.35);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: clamp(12px, 1.5vw, 16px);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: clamp(1.35rem, 3.2vw, 1.75rem);
+  font-weight: 700;
+  color: #f1f5f9;
+  margin: 0 0 0.25rem 0;
+}
+
+.welcome {
+  font-size: clamp(0.85rem, 1.8vw, 0.95rem);
+  color: #94a3b8;
+  margin: 0 0 1.25rem 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.75rem, 1.5vw, 1rem);
+}
+
+.label {
+  font-size: clamp(0.75rem, 1.6vw, 0.8rem);
+  font-weight: 500;
+  color: #cbd5e1;
+  margin: 0;
+}
+
+.input {
+  width: 100%;
+  padding: clamp(0.6rem, 1.2vw, 0.75rem) clamp(0.75rem, 1.5vw, 1rem);
+  border: 1px solid rgba(203, 213, 225, 0.7);
+  border-radius: clamp(6px, 0.8vw, 8px);
+  background: #f1f5f9;
+  color: #0f172a;
+  font-size: clamp(0.875rem, 1.8vw, 0.95rem);
+  box-sizing: border-box;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.input::placeholder {
+  color: #94a3b8;
+}
+
+.input:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.error {
+  color: #dc2626;
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+/* Primary button: dark blue with glow border */
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.35rem, 1vw, 0.5rem);
+  padding: clamp(0.65rem, 1.5vw, 0.85rem) clamp(1rem, 2vw, 1.25rem);
+  margin-top: 0.25rem;
+  background: #1e3a5f;
+  color: #fff;
+  border: 2px solid rgba(59, 130, 246, 0.7);
+  border-radius: clamp(8px, 1vw, 10px);
+  font-size: clamp(0.9rem, 1.8vw, 1rem);
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 0 20px rgba(59, 130, 246, 0.35);
+}
+
+.button:hover:not(:disabled) {
+  background: #1e40af;
+  border-color: #3b82f6;
+  box-shadow: 0 0 24px rgba(59, 130, 246, 0.5);
+}
+
+.button:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.buttonIcon {
+  font-size: 1.1rem;
+  opacity: 0.95;
+}
+
+.links {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: clamp(1rem, 2vw, 1.25rem);
+  font-size: clamp(0.8rem, 1.6vw, 0.85rem);
+}
+
+.link {
+  color: #94a3b8;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #e2e8f0;
+  text-decoration: underline;
+}
+
+.sep {
+  color: #64748b;
+  user-select: none;
+}
+
+.ssoLabel {
+  margin: clamp(1.25rem, 2.5vw, 1.5rem) 0 clamp(0.6rem, 1.2vw, 0.75rem) 0;
+  font-size: clamp(0.8rem, 1.6vw, 0.85rem);
+  color: #94a3b8;
+  text-align: center;
+}
+
+.ssoIcons {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: clamp(0.6rem, 1.5vw, 1rem);
+}
+
+.ssoBtn {
+  width: clamp(36px, 8vw, 44px);
+  height: clamp(36px, 8vw, 44px);
+  border-radius: 50%;
+  border: 1px solid #e2e8f0;
+  background: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s, box-shadow 0.15s;
+}
+
+.ssoBtn:hover:not(:disabled) {
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.ssoBtn:disabled {
+  cursor: default;
+  opacity: 0.8;
+}
+
+.ssoIconA {
+  width: clamp(16px, 3.5vw, 20px);
+  height: clamp(16px, 3.5vw, 20px);
+  background: linear-gradient(135deg, #7dd3fc 0%, #0ea5e9 100%);
+  clip-path: polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%);
+}
+
+.ssoIconB {
+  width: clamp(16px, 3.5vw, 20px);
+  height: clamp(16px, 3.5vw, 20px);
+  background: #64748b;
+  border-radius: 4px;
+  position: relative;
+}
+
+.ssoIconB::after {
+  content: "";
+  position: absolute;
+  inset: 4px;
+  border: 2px solid #fff;
+  border-radius: 2px;
+}
+
+.ssoGoogle {
+  font-size: clamp(0.95rem, 2vw, 1.1rem);
+  font-weight: 700;
+  color: #4285f4;
+  font-family: system-ui, sans-serif;
+}
+
+/* Laptop and smaller: form stays within viewport and scales down */
+@media (max-width: 1024px) {
+  .card {
+    max-width: min(340px, 90vw);
+    min-width: min(260px, 88vw);
+  }
+}
+
+@media (max-width: 640px) {
+  .wrapper {
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .bgOverlay {
+    background: rgba(10, 14, 26, 0.5);
+  }
+
+  .card {
+    max-width: 95vw;
+    min-width: 0;
+  }
+}

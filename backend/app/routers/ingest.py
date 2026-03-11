@@ -9,6 +9,7 @@ import shutil
 import time
 from fastapi import APIRouter, UploadFile, File, HTTPException, Depends
 from sqlalchemy.orm import Session
+from backend.app.core.auth import get_current_user
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.documents import Document
@@ -22,16 +23,19 @@ UPLOAD_DIR = "uploaded_files"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 @router.post("/upload")
-async def ingest_document(user_id: int, file: UploadFile = File(...), db: Session = Depends(get_db)):
+async def ingest_document(
+    file: UploadFile = File(...),
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
     """
     1. Saves the uploaded PDF.
     2. Reads and chunks the text.
     3. Generates metadata for the document.
     4. Embeds and stores it in ChromaDB (Vector Store).
     """
-    # SECURITY CHECK: Only Admins or HRs can upload knowledge documents.
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user or user.role.name not in ["admin", "hr"]:
+    user = current_user
+    if user.role.name not in ["admin", "hr"]:
         raise HTTPException(
             status_code=403, 
             detail="Forbidden: Only Admins or HRs can upload knowledge documents."

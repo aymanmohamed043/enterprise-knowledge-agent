@@ -1,0 +1,90 @@
+.wrapper {
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.6);
+  border: 1px solid rgba(71, 85, 105, 0.4);
+  border-radius: 12px;
+  margin-bottom: 1rem;
+}
+
+.title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e2e8f0;
+  margin: 0 0 0.75rem 0;
+}
+
+.dropZone {
+  border: 2px dashed rgba(71, 85, 105, 0.8);
+  border-radius: 8px;
+  padding: 1.5rem;
+  text-align: center;
+  color: #94a3b8;
+  cursor: pointer;
+  position: relative;
+  transition: border-color 0.2s, background 0.2s;
+}
+
+.dropZone:hover:not(.uploading) {
+  border-color: #64748b;
+  background: rgba(30, 41, 59, 0.5);
+}
+
+.dropZone.dragging {
+  border-color: #0ea5e9;
+  background: rgba(14, 165, 233, 0.1);
+}
+
+.dropZone.uploading {
+  cursor: not-allowed;
+  opacity: 0.8;
+}
+
+.input {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  cursor: pointer;
+}
+
+.dropZone.uploading .input {
+  cursor: not-allowed;
+}
+
+.forbidden {
+  color: #94a3b8;
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.error {
+  color: #f87171;
+  font-size: 0.875rem;
+  margin: 0.75rem 0 0 0;
+}
+
+.result {
+  margin-top: 0.75rem;
+  padding: 0.75rem;
+  background: rgba(15, 23, 42, 0.6);
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.success {
+  color: #34d399;
+  margin: 0 0 0.25rem 0;
+}
+
+.filename {
+  color: #94a3b8;
+  margin: 0 0 0.5rem 0;
+}
+
+.insights {
+  color: #cbd5e1;
+  margin: 0.5rem 0 0 0;
+}
+
+.insights p {
+  margin: 0.25rem 0 0 0;
+}

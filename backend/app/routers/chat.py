@@ -7,14 +7,20 @@ if str(_REPO_ROOT) not in sys.path:
     sys.path.insert(0, str(_REPO_ROOT))
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session, joinedload
+from pydantic import BaseModel
+from sqlalchemy.orm import Session
 from backend.app.db.database import get_db
 from backend.app.db.models import User, ChatHistory
+from backend.app.core.auth import get_current_user
 from backend.app.agents.graph import app_graph
 from langchain_core.messages import HumanMessage, AIMessage
 
 router = APIRouter(prefix="/chat", tags=["AI Chat"])
 logger = logging.getLogger(__name__)
+
+
+class ChatSendBody(BaseModel):
+    message: str
 
 
 def _message_content_to_str(content) -> str:
@@ -32,18 +38,16 @@ def _message_content_to_str(content) -> str:
     return str(content) if content is not None else ""
 
 @router.post("/send")
-async def chat_with_agent(user_id: int, message: str, db: Session = Depends(get_db)):
+async def chat_with_agent(
+    body: ChatSendBody,
+    current_user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    user = current_user
+    message = body.message
+    user_id = user.id
     logger.info("chat request | user_id=%s", user_id)
-    # 1. Fetch User and Role (eager-load role so it's always available)
-    user = (
-        db.query(User).filter(User.id == user_id).first()
-    )
-
-    logger.info("user: %s", user.name)
-    logger.info("user.role: %s", user.role.name)
-    
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
+    logger.info("user: %s | role: %s", user.name, user.role.name)
     role_name = user.role.name
     logger.info("chat request | user_id=%s | role=%s", user_id, role_name)
 

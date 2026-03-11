@@ -101,6 +101,8 @@ Comparison Analytics: The ability for the agent to say: "According to the SQL da
 ------------------------------
 
 Metric,Original Setup,New Setup,Improvement
+
+
 Total Latency,10.83s,~5.4s,~50% Faster
 Formatter Time,7.36s,~1.9s,~74% Faster
 Total Cost,$0.0048,$0.0008,83% Cheaper
