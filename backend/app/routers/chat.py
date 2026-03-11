@@ -66,6 +66,7 @@ async def chat_with_agent(
     
     # 4. Add the NEW message to the list
     formatted_history.append(HumanMessage(content=message))
+    logger.info("formatted_history: %s", formatted_history)
 
     # 5. Invoke the Brain (pass db so orchestrator can call get_knowledge_catalog(db))
     initial_state = {
@@ -74,6 +75,7 @@ async def chat_with_agent(
         "db": db,
     }
 
+    logger.info("initial_state that enter the graph: %s", initial_state)
     result = app_graph.invoke(initial_state)
     raw_content = result["messages"][-1].content
     ai_final_text = _message_content_to_str(raw_content)
