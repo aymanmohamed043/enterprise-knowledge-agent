@@ -14,6 +14,7 @@ from backend.app.agents.state import AgentState
 from backend.app.agents.orchestrator import orchestrator_node
 from backend.app.agents.tool_node import query_db, search_docs
 from backend.app.agents.formatter import formatter_node
+from backend.app.agents.refiner import refiner_node
 
 logger = logging.getLogger(__name__)
 
@@ -44,12 +45,14 @@ workflow = StateGraph(AgentState)
 # 2. Add the "Brain" (The Orchestrator)
 workflow.add_node("orchestrator", orchestrator_node)
 workflow.add_node("formatter", formatter_node)
+workflow.add_node("refiner", refiner_node)
 
 # 3. Add the "Hands" (The Action Layer) with logging
 workflow.add_node("action_layer", _action_layer_node)
 
 # 4. Set the Entry Point
-workflow.set_entry_point("orchestrator")
+workflow.set_entry_point("refiner")
+workflow.add_edge("refiner", "orchestrator")
 
 # 5. Define the "Conditional Edge" (The Traffic Controller)
 workflow.add_conditional_edges(

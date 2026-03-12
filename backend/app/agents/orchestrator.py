@@ -51,6 +51,8 @@ def orchestrator_node(state: AgentState):
     model_with_tools = llm.bind_tools(allowed_tools)
 
     input_message = [SystemMessage(content=persona)] + state["messages"]
+    logger.info(f"input message in orchestrator node: {input_message} ")
+
     response = model_with_tools.invoke(input_message)
 
     # Log orchestrator result for each node trace
@@ -62,13 +64,7 @@ def orchestrator_node(state: AgentState):
             content_preview = raw[:300] + "..." if len(raw) > 300 else raw
         else:
             content_preview = str(raw)[:300]
-    logger.info(
-        "graph node=orchestrator | role=%s | tool_calls=%s | content_len=%s | content_preview=%s",
-        role,
-        len(tool_calls),
-        len(content_preview),
-        content_preview[:150] if content_preview else "(none)",
-    )
+    
     return {"messages": [response]}
 
 if __name__ == "__main__":

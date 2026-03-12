@@ -19,3 +19,5 @@ frontend/.cache/
 frontend/coverage/
 frontend/*.tsbuildinfo
 frontend/.vite/
+
+.cursor/

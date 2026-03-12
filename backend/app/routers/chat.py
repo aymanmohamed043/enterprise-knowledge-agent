@@ -77,8 +77,11 @@ async def chat_with_agent(
 
     logger.info("initial_state that enter the graph: %s", initial_state)
     result = app_graph.invoke(initial_state)
-    raw_content = result["messages"][-1].content
-    ai_final_text = _message_content_to_str(raw_content)
+    raw_content = result["messages"][-1]
+    ai_final_text = f"{raw_content.content}"
+
+    logger.info("input message: %s", message)
+    logger.info("ai_final_text: %s", ai_final_text)
 
     # 6. Persistence: Save the NEW exchange to the DB (content must be a string)
     user_msg = ChatHistory(user_id=user_id, role=role_name, content=message, sender="user")
