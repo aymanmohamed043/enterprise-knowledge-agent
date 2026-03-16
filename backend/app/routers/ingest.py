@@ -71,16 +71,16 @@ async def ingest_document(
         splits = text_splitter.split_documents(docs)
 
         # 3. Add Metadata (Crucial for filtering later!)
-        for split in splits:
+        upload_ts = time.strftime("%Y-%m-%d %H:%M:%S")
+        for i, split in enumerate(splits):
             split.metadata["source"] = file.filename
-            split.metadata["uploaded_at"] = time.strftime("%Y-%m-%d %H:%M:%S")
+            split.metadata["uploaded_at"] = upload_ts
 
-        # 4. Push to ChromaDB
+        # 4. Push to ChromaDB with explicit unique IDs so new uploads never overwrite old docs
         vector_store = get_vector_store()
-        vector_store.add_documents(splits)
+        unique_ids = [f"{file.filename}_{i}_{int(time.time() * 1000)}" for i in range(len(splits))]
+        vector_store.add_documents(splits, ids=unique_ids)
 
-        # Cleanup: remove local file after indexing
-        os.remove(file_path)
 
         return {
            "message": f"Successfully indexed {len(splits)} chunks.",

@@ -28,7 +28,8 @@ def get_vector_store():
     vector_store = Chroma(
         client=client,
         collection_name="enterprise_knowledge",
-        embedding_function=embeddings_model
+        embedding_function=embeddings_model,
+        persist_directory="chroma_db"
     )
     return vector_store
 
